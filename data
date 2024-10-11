@@ -1,0 +1,36 @@
+import numpy as np
+import pandas as pd
+
+def generate_synthetic_order_book_data(num_samples=1000):
+    """
+    Generates synthetic order book data with timestamps, bid/ask prices and volumes.
+    """
+    np.random.seed(42)
+    
+    # Timestamps
+    timestamps = pd.date_range(start='2024-01-01', periods=num_samples, freq='T')
+    
+    # Simulating bid and ask prices with small random fluctuations
+    base_price = 100
+    bid_prices = base_price + np.cumsum(np.random.randn(num_samples) * 0.5)
+    ask_prices = bid_prices + np.random.uniform(0.01, 0.05, size=num_samples)  # ask prices are slightly higher
+    
+    # Simulating volumes
+    bid_volumes = np.random.randint(50, 1000, size=num_samples)
+    ask_volumes = np.random.randint(50, 1000, size=num_samples)
+    
+    # Creating a DataFrame
+    data = pd.DataFrame({
+        'timestamp': timestamps,
+        'bid_price': bid_prices,
+        'ask_price': ask_prices,
+        'bid_volume': bid_volumes,
+        'ask_volume': ask_volumes
+    })
+    
+    return data
+
+if __name__ == "__main__":
+    data = generate_synthetic_order_book_data()
+    data.to_csv('synthetic_order_book.csv', index=False)
+    print("Synthetic data generated and saved to 'synthetic_order_book.csv'.")
